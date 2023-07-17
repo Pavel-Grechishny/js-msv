@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {border-collapse: collapse;}
+        td{border: 1px solid black;}
+        thead { background-color: lightgray; cursor:alias;}
+        th{border: 1px solid black;}
+        th:hover {background-color:gray;color:white;}
+    </style>
+</head>
+<body>
+    <table class="sortable">
+        <thead>
+          <tr>
+            <th data-sort-type="string">Строка</th>
+            <th data-sort-type="number">Число</th>
+            <th data-sort-type="date">Дата</th>
+            <th data-sort-type="music-note">Нота</th>
+            <th data-sort-type="hex">Hex</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>E7</td>
+            <td>7.2</td>
+            <td>11-01-2000</td>
+            <td>Ми</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td>D5</td>
+            <td>5</td>
+            <td>11-02-2000</td>
+            <td>ДО</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>F6</td>
+            <td>+5</td>
+            <td>10-01-2000</td>
+            <td>ре</td>
+            <td>01</td>
+          </tr>
+          <tr>
+            <td>A3</td>
+            <td></td>
+            <td>12-25-2019</td>
+            <td>фа</td>
+            <td>10</td>
+          </tr>
+          <tr>
+            <td>C1</td>
+            <td>11</td>
+            <td>11-01-2001</td>
+            <td>ля</td>
+            <td>0xFF</td>
+          </tr>
+          <tr>
+            <td>B2</td>
+            <td>2</td>
+            <td>01-01-2000</td>
+            <td></td>
+            <td>F0</td>
+          </tr>
+          <tr>
+            <td>H9</td>
+            <td>-1</td>
+            <td></td>
+            <td>си</td>
+            <td>AA</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>8</td>
+            <td>05-05-1999</td>
+            <td>фа#</td>
+            <td>AB</td>
+          </tr>
+      
+        </tbody>
+      </table>
+
+      <script>
+        // прикрепим слушатель ко всем подходящим THEAD (у нас найдется один, но sortable-таблиц может быть и несколько)
+        document.querySelectorAll("table.sortable thead").forEach(t => t.addEventListener("click", clickListener));
+
+        function compare(compType, a, b) {  // функция умеет сравнивать два значения получая параметром тип этих значений
+          const note_array = {до: 1, ре: 2, ми: 3, фа: 4, "фа#": 4.5, соль: 5, ля: 6, си: 7 };
+          switch (compType) {
+            case "string": return a > b ? 1 :  a == b ? 0 : -1;
+            case "number": return +a  - +b;
+            case "date": return new Date(a) - new Date(b);
+            case "music-note": return (note_array[a.toLowerCase()] || 0) - (note_array[b.toLowerCase()] || 0);
+            case "hex": return (parseInt(a, 16) || 0) - (parseInt(b, 16) || 0);
+          }
+        }
+
+        function getCmpFunction(n,sortType){
+          return function (a, b) {  // функция сравнений двух TR, замыкает в себе значения n и sortType
+            return compare(sortType, a.cells[n].innerText, b.cells[n].innerText);
+          }
+        }
+
+        function clickListener(evt) {
+          const 
+                theadCell = evt.target.closest('th'),
+                n = theadCell.cellIndex, // номер столбца
+                sortType = theadCell.dataset.sortType, // тип сортировки столбца
+                table = theadCell.closest("table"), // поиск вверх
+                tbody = table.querySelector('tbody'),  
+                rows = Array.from(tbody.rows), // [...tbody.rows]
+                cmp = getCmpFunction(n,sortType);
+          rows.sort(cmp);
+          tbody.append(...rows);
+        }
+
+
+
+
+
+
+      </script>
+</body>
+</html>

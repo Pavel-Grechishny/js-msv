@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        ol {
+            padding: 20px;
+            background-color: papayawhip;
+            user-select: none;
+        }
+        .selected {
+            background-color: orange;
+        }
+        li {
+            transition: background-color 300ms linear;
+        }
+    </style>
+</head>
+<body>
+    <ol>
+        <li>"JavaScript for Kids: A Playful Introduction to Programming" by Nick Morgan</li>
+        <li>"Eloquent JavaScript: A Modern Introduction to Programming" by Marijn Haverbeke</li>
+        <li><b>"JavaScript: The Good Parts"</b> by Douglas Crockford</li>
+        <li>"Programming JavaScript Applicftions: Robust Web Architecture width <i><b>Node, HTML5, and Moderns JS Libraries</b></i>"
+          by Eric Elliott</li>
+        <li>"Effective JavaScript: 68 Specific Ways to Harness the Power of JavaScript" By David Herman</li>
+        <li><i>"JavaScript: The Definitive Guide" by David Flanagan</i></li>
+        <li>"You Don't Know JS" by Kyle Simpson</li>
+    </ol>
+
+    <script>
+        /* eslint-disable no-fallthrough */
+        /* eslint-disable no-case-declarations */
+        'use strict';
+        const
+        SELECTED = 'selected',
+        ol = document.querySelector('ol');
+        let
+        lastLi;
+
+        ol.addEventListener('click', evt => {
+        const
+            li = evt.target.closest('li');
+        if (!li) return;
+        switch ((evt.shiftKey ? 'Shift' : '') + (evt.ctrlKey ? 'Ctrl' : '')) {
+            case '': // без клавиш модификаторов
+            ol.querySelectorAll(`li.${SELECTED}`)
+                .forEach(el => { if (el !== li) el.classList.remove(SELECTED); }); //убрать со всех помеченных кроме текущего
+            case 'Ctrl':
+            li.classList.toggle(SELECTED); // переключаем пометку у текущего LI
+            break;
+            case 'Shift':
+            const
+                liArray = [...ol.querySelectorAll('li')], // получим массив из коллекции
+                numbs = [li, lastLi].map(x => liArray.indexOf(x)),
+                min = Math.min(...numbs),
+                max = Math.max(...numbs);
+            liArray
+                .filter((_, i) => min <= i && i <= max)
+                .forEach(el => el.classList.add(SELECTED)); // помечаем в промежутке от последнего клика до текущего
+        }
+        lastLi = li;
+        });
+
+
+    </script>
+</body>
+</html>

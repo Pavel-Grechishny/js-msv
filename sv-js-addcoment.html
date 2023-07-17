@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        textarea {
+            width: 100%;
+        }
+        .add { 
+            padding: .5em 2em;
+        }
+        main { 
+            height: 200vh
+        }
+        article {
+            padding: 0.3em;
+            margin: 0.3em;
+            border: 1px solid blue;
+        }
+        .up {
+            position: fixed;
+            right: 5vmin;
+            bottom: 5vmin;
+            background-color: lightblue;
+            transition: opacity 300ms;
+            padding: 1em;
+        }
+        .opacity {
+            opacity: 0%;
+        }
+    </style>
+</head>
+<body>
+
+    comment: <textarea></textarea>
+    <button class="add">Add</button>
+    <main></main>
+    <button class="up opacity">up</button>
+
+    <template id="comment">
+    <article>
+        <h4></h4>
+        <i></i>
+        <div></div>
+        <button class="micro" onclick="alert()">del</button>
+    </article>
+    <hr>
+    </template>
+
+
+        <script>
+        const main = document.querySelector("main"),
+        button = document.querySelector("button"),
+        textarea = document.querySelector("textarea"),
+        up = document.querySelector("button.up"),
+        template =   document.querySelector('template#comment');
+
+        function newComment(text) {
+            const comment = template.content.cloneNode(true);
+            comment.querySelector('h4').textContent = new Date;
+            comment.querySelector('div').textContent = text;
+            comment.querySelector('i').textContent = Math.random();
+            // const comment = document.createElement("article");
+            // comment.textContent = text;
+            // const h4 = document.createElement("h4");
+            // h4.textContent = new Date;
+            // comment.prepend(h4);
+            // return comment;
+            return comment;
+        }
+
+        button.addEventListener('click',evt=>{  
+            main.append(newComment(textarea.value));
+            textarea.value ='';
+        });
+
+        window.addEventListener("scroll", _ => {
+            if (window.scrollY > 100) 
+                up.classList.remove("opacity");
+            else 
+                up.classList.add("opacity");
+        });
+
+        up.addEventListener("click", _ => window.scrollTo({ top: 0 }));
+    </script>
+</body>
+</html>

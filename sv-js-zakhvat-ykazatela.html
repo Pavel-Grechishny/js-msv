@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        flex-direction: column;
+        justify-content: space-evenly;
+        }
+        .slider {
+        width: 400px;
+        height: 10px;
+        background-color: lime;
+        }
+        .slider .thumb {
+        position: relative;
+        aspect-ratio: 1;
+        background-color: green;
+        height: 40px;
+        border-radius: 50%;
+        margin-top: -15px;
+        margin-left: -20px; 
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="slider">
+        <div class="thumb"></div>
+    </div>
+    <div class="slider" style="width:15%">
+        <div class="thumb"></div>
+    </div>
+
+
+
+
+    <script>
+        'use strict';
+        document
+        .querySelectorAll('.slider .thumb')
+        .forEach(el => el.addEventListener('pointerdown', evt => {
+            const
+            thumb = evt.target.closest('.thumb');
+            thumb.setPointerCapture(evt.pointerId);
+            thumb.addEventListener('pointermove', onPointerMove);
+            thumb.addEventListener('pointerup', _ => {
+                thumb.removeEventListener('pointermove', onPointerMove);
+                thumb.style.cursor = '';
+            },{ once: true }
+            )
+        thumb.style.cursor = 'grab';
+        }));
+
+        function onPointerMove(evt) {
+        const
+            thumb = evt.target.closest('.thumb'),
+            sliderClientRect = thumb.closest('.slider').getBoundingClientRect();
+        let
+            newLeft = evt.clientX - sliderClientRect.left;
+        if (newLeft < 0) newLeft = 0;
+        if (newLeft > sliderClientRect.width) newLeft = sliderClientRect.width;
+        thumb.style.left = newLeft + 'px';
+        // console.log(getEventListeners(thumb));
+        }
+
+    // https://learn.javascript.ru/pointer-events#zahvat-ukazatelya
+    </script>
+
+</body>
+</html>

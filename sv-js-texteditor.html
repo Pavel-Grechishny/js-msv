@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div,textarea {
+            background-color: aliceblue;
+            font-size: large;
+            font-family:serif;
+            padding: 0.2em;
+        }
+
+
+    </style>
+</head>
+<body>
+
+
+    <hr>
+    <div>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam auctor turpis quis pellentesque mattis. Vivamus vestibulum eros ipsum, eget malesuada massa ornare a. Etiam odio erat, luctus at lorem eget, ornare vulputate ipsum. Pellentesque sodales, erat vitae semper scelerisque, lorem ipsum consectetur sem, ac venenatis felis nibh eu ligula. Duis sit amet nibh nec risus ullamcorper facilisis at quis nisl. Phasellus nec nisi sapien. Nulla sem tellus, consectetur sed nisi sed, iaculis vestibulum risus. Aenean tempus sem a rutrum vehicula.
+
+        Vivamus nec est posuere, vulputate quam id, aliquet urna. Morbi suscipit a sem ut interdum. Morbi ornare sagittis tincidunt. Nullam nec mollis sapien, id feugiat ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris vehicula nisi vulputate, congue dolor vitae, tempus risus. Maecenas efficitur felis diam, bibendum volutpat mi ultrices vel. Curabitur faucibus orci in lectus feugiat, nec elementum tellus semper. Fusce volutpat augue sit amet sapien lobortis euismod ut eu tellus. Vivamus in lorem in libero vestibulum luctus. Integer vitae condimentum nibh. Fusce sed convallis risus. Cras lacus ex, lacinia non magna at, malesuada efficitur metus. Etiam quis posuere augue. Nullam elementum faucibus est a consectetur.
+    </div>
+    <textarea hidden></textarea>
+    <hr>
+
+
+
+
+    <script>
+        let div = document.querySelector("div"),
+            ta = document.querySelector("textarea"),
+            inEditMode = false;
+
+        document.addEventListener("keydown", keyhandler);
+
+        function keyhandler(e) {
+            if (!e.ctrlKey || (e.code != "KeyE" && e.code != "KeyS")) return;
+            switch (e.code) {
+                case "KeyE":
+                if (inEditMode) return;
+                inEditMode = true;
+                startEdit();      
+                break;
+                case "KeyS":
+                if (!inEditMode) return;
+                inEditMode = false;
+                endEdit();      
+                break;
+            }
+            e.preventDefault();
+        }
+
+        function startEdit() {
+            ta.style.height = getComputedStyle(div).height;
+            ta.style.width = getComputedStyle(div).width;
+            div.hidden = true; // делаем DIV невидимым
+            ta.value = div.innerText;
+            ta.hidden = false; // делаем видимым TEXTAREA
+        }
+
+        function endEdit() {
+            ta.hidden = true; // делаем невидимым TEXTAREA
+            div.innerText = ta.value;
+            div.hidden = false; // делаем DIV видимым
+        }
+    </script>
+    
+</body>
+</html>
